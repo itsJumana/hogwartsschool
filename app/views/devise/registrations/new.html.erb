@@ -1,0 +1,50 @@
+<h2>Register as a Wizard</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |form| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field mb-3">
+    <%= form.label :name %>
+    <%= form.text_field :name, autofocus: true, placeholder: "Enter your name", class: "form-control", required: true %>
+  </div>
+
+  <div class="field mb-3">
+    <%= form.label :email %><br />
+    <%= form.email_field :email, placeholder: "email@example.com", autocomplete: "email", class: "form-control", required: true  %>
+  </div>
+
+  <div class="field mb-3">
+    <%= form.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= form.password_field :password, placeholder: "Password (1 uppercase, 1 lowercase, 1 number)", autocomplete: "new-password", class: "form-control", required: true  %>
+  </div>
+
+  <div class="field mb-3">
+    <%= form.label :password_confirmation %><br />
+    <%= form.password_field :password_confirmation,placeholder: "Confirm Password", autocomplete: "new-password", class: "form-control", required: true  %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :date_of_birth %>
+    <%= form.date_select :date_of_birth, start_year: Date.current.year - 100, end_year: Date.current.year - 10, class: "form-control, required: true"%>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :bio %>
+    <%= form.text_area :bio, placeholder: "Tell us about yourself (optional)", class: "form-control" %>
+  </div>
+
+  <div class="mb-3 form-check">
+    <%= form.hidden_field :muggle_relative, value: false %>
+    <%= form.check_box :muggle_relative, { checked: false }, true, false %>
+    <%= form.label :is_muggle_relative, "Do you have any relatives from the Muggle world?", class: "form-check-label" %>
+  </div>
+
+  <div class="mb-3 actions">
+    <%= form.submit "Register", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
