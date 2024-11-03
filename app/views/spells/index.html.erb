@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Spells</h1>
+
+<div id="spells">
+  <% @spells.each do |spell| %>
+    <%= render spell %>
+    <p>
+      <%= link_to "Show this spell", spell %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New spell", new_spell_path %>

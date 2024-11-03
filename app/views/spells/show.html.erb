@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @spell %>
+
+<div>
+  <%= link_to "Edit this spell", edit_spell_path(@spell) %> |
+  <%= link_to "Back to spells", spells_path %>
+
+  <%= button_to "Destroy this spell", @spell, method: :delete %>
+</div>
