@@ -11,47 +11,43 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="field mb-3">
+    <b><%= form.label :name, style: "display: block" %></b>
+    <%= form.text_field :name, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
+  <div class="field mb-3">
+    <b><%= form.label :email, style: "display: block" %></b>
+    <%= current_wizard.email %>
   </div>
 
-  <div>
-    <%= form.label :password_digest, style: "display: block" %>
-    <%= form.text_field :password_digest %>
+  <div class="field mb-3">
+    <b><%= form.label :date_of_birth, style: "display: block" %></b>
+    <%= form.date_field :date_of_birth, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :date_of_birth, style: "display: block" %>
-    <%= form.date_field :date_of_birth %>
+  <div class="field mb-3">
+    <b><%= form.label :bio, style: "display: block" %></b>
+    <%= form.text_area :bio, class: "form-control"%>
   </div>
 
-  <div>
-    <%= form.label :bio, style: "display: block" %>
-    <%= form.text_area :bio %>
-  </div>
-
-  <div>
-    <%= form.label :muggle_relative, style: "display: block" %>
+  <div class="field mb-3">
+    <b><%= form.label :muggle_relative, style: "display: block" %></b>
     <%= form.check_box :muggle_relative %>
   </div>
 
-  <div>
-    <%= form.label :house, style: "display: block" %>
-    <%= form.text_field :house %>
+  <div class="field mb-3">
+    <b><%= form.label :house, style: "display: block" %></b>
+    <%= current_wizard.house %>
   </div>
 
-  <div>
-    <%= form.label :profile_image, style: "display: block" %>
-    <%= form.text_field :profile_image %>
+  <div class="field mb-3">
+    <b><%= form.label :profile_image, style: "display: block" %></b>
+    <%= form.text_field :profile_image, class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="actions mb-3">
+    <%= form.submit "Update Profile", class: "btn btn-primary" %>
+    <%= link_to "Cancel", wizard_profile_path, class: "btn btn-secondary" %>
   </div>
 <% end %>

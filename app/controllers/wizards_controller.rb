@@ -1,5 +1,6 @@
 class WizardsController < ApplicationController
   before_action :set_wizard, only: %i[ show edit update destroy ]
+  before_action :authenticate_wizard!, except: [:index, :show]
 
   # GET /wizards or /wizards.json
   def index
@@ -17,6 +18,17 @@ class WizardsController < ApplicationController
 
   # GET /wizards/1/edit
   def edit
+    @wizard = Wizard.find(params[:id])
+  
+    # Only allow the wizard to edit their own profile
+    if @wizard != current_wizard
+      redirect_to root_path, alert: "Not authorized to edit this profile"
+    end
+  end
+
+  #GET /profile
+  def profile
+    @wizard = current_wizard
   end
 
   # POST /wizards or /wizards.json
@@ -42,8 +54,8 @@ class WizardsController < ApplicationController
   # PATCH/PUT /wizards/1 or /wizards/1.json
   def update
     respond_to do |format|
-      if @wizard.update(wizard_params)
-        format.html { redirect_to @wizard, notice: "Wizard was successfully updated." }
+      if @wizard.update(wizard_update_params)
+        format.html { redirect_to wizard_profile_path, notice: "Wizard was successfully updated." }
         format.json { render :show, status: :ok, location: @wizard }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -71,5 +83,9 @@ class WizardsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def wizard_params
       params.require(:wizard).permit(:name, :email, :password, :password_confirmation, :date_of_birth, :bio, :muggle_relative, :profile_image)
+    end
+
+    def wizard_update_params
+      params.require(:wizard).permit(:name, :date_of_birth, :bio, :muggle_relative, :profile_image)
     end
 end

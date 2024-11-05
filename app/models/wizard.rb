@@ -16,9 +16,10 @@ class Wizard < ApplicationRecord
   # Validations
   validates :name, presence: true
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "Invalid email format." }
-  validates :password, presence: true, length: { minimum: 8 }, format: { 
+  validates :password, presence: true, length: { minimum: 6 }, format: { 
     with: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/,
-    message: "Must include one capital letter, one small letter, and one number." }
+    message: "Must include one capital letter, one small letter, and one number." },
+    if: :password_required?
   validates :date_of_birth, presence: true
   validates :muggle_relative, inclusion: { in: [true, false] }
 

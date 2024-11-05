@@ -19,7 +19,7 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
       <% if current_wizard %>
         <li class="nav-item">
-           <%= link_to current_wizard.email, wizard_path(current_wizard), class: "nav-link" %>
+           <%= link_to current_wizard.email, wizard_profile_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
           <%= button_to "Logout", destroy_wizard_session_path, method: "delete", class: "btn btn-outline-secondary"%>
