@@ -21,11 +21,11 @@ class SpellsController < ApplicationController
 
   # POST /spells or /spells.json
   def create
-    @spell = Spell.new(spell_params)
+    @spell = current_wizard.spells.build(spell_params)
 
     respond_to do |format|
       if @spell.save
-        format.html { redirect_to @spell, notice: "Spell was successfully created." }
+        format.html { redirect_to wizard_profile_path, notice: "Spell was successfully created." }
         format.json { render :show, status: :created, location: @spell }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -65,6 +65,6 @@ class SpellsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def spell_params
-      params.require(:spell).permit(:wizard_id, :name, :description)
+      params.require(:spell).permit(:name, :description)
     end
 end
