@@ -7,6 +7,15 @@ class Wizard < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   
+
+  # Roles
+  ADMIN_ROLE = "admin"
+  WIZARD_ROLE = "wizard"
+
+  def admin?
+    role == ADMIN_ROLE
+  end
+
   # Associations
   has_many :spells
   has_many :followers, foreign_key: :follower_id, class_name: 'Follower'
@@ -19,9 +28,10 @@ class Wizard < ApplicationRecord
   validates :password, presence: true, length: { minimum: 6 }, format: { 
     with: /(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/,
     message: "Must include one capital letter, one small letter, and one number." },
-    if: :password_required?
+    if: :password_required?, unless: :admin?
   validates :date_of_birth, presence: true
   validates :muggle_relative, inclusion: { in: [true, false] }
+  validates :role, inclusion: { in: [ADMIN_ROLE, WIZARD_ROLE] }
 
   private
 
