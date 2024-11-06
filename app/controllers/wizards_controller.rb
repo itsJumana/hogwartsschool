@@ -1,6 +1,7 @@
 class WizardsController < ApplicationController
   before_action :set_wizard, only: %i[ show edit update destroy ]
   before_action :authenticate_wizard!, except: [:index, :show]
+  before_action :authorize_wizard, only: %i[ edit update destroy ]
 
   # GET /wizards or /wizards.json
   def index
@@ -18,12 +19,6 @@ class WizardsController < ApplicationController
 
   # GET /wizards/1/edit
   def edit
-    @wizard = Wizard.find(params[:id])
-  
-    # Only allow the wizard to edit their own profile
-    if @wizard != current_wizard
-      redirect_to root_path, alert: "Not authorized to edit this profile"
-    end
   end
 
   #GET /profile
@@ -86,6 +81,18 @@ class WizardsController < ApplicationController
     end
 
     def wizard_update_params
-      params.require(:wizard).permit(:name, :date_of_birth, :bio, :muggle_relative, :profile_image)
+      # Allow house and email to be updated only if the current wizard is the admin
+      if current_wizard.admin?
+        params.require(:wizard).permit(:name, :email, :date_of_birth, :bio, :muggle_relative, :profile_image, :house)
+      else
+        params.require(:wizard).permit(:name, :date_of_birth, :bio, :muggle_relative, :profile_image)
+      end
+    end
+
+    # Allows access if the wizard is either the owner of the profile or the admin.
+    def authorize_wizard
+      unless @wizard == current_wizard || current_wizard.admin?
+        redirect_to root_path, alert: "Not authorized to edit this profile"
+      end
     end
 end

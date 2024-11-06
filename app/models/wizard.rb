@@ -36,6 +36,6 @@ class Wizard < ApplicationRecord
   private
 
   def assign_house
-    self.house = HOUSES.sample
+    self.house = admin? ? "Gryffindor" : HOUSES.sample
   end
 end

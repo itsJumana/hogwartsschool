@@ -18,7 +18,11 @@
 
   <div class="field mb-3">
     <b><%= form.label :email, style: "display: block" %></b>
-    <%= current_wizard.email %>
+    <% if current_wizard.admin? %>
+      <%= form.text_field :email, class: "form-control" %>
+    <% else %>
+      <%= current_wizard.email %>
+    <% end %>
   </div>
 
   <div class="field mb-3">
@@ -38,7 +42,11 @@
 
   <div class="field mb-3">
     <b><%= form.label :house, style: "display: block" %></b>
-    <%= current_wizard.house %>
+    <% if current_wizard.admin? %>
+      <%= form.select :house, Wizard::HOUSES, {}, class: "form-control" %>
+    <% else %>
+      <%= current_wizard.house %>
+    <% end %>
   </div>
 
   <div class="field mb-3">
