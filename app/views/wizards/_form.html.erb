@@ -1,8 +1,6 @@
 <%= form_with(model: wizard) do |form| %>
   <% if wizard.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(wizard.errors.count, "error") %> prohibited this wizard from being saved:</h2>
-
       <ul>
         <% wizard.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -50,9 +48,45 @@
   </div>
 
   <div class="field mb-3">
-    <b><%= form.label :profile_image, style: "display: block" %></b>
-    <%= form.text_field :profile_image, class: "form-control" %>
+  <b><%= form.label :profile_image, style: "display: block" %></b>
+
+  <!-- Display current profile image if attached -->
+  <% if current_wizard.profile_image.attached? %>
+    <div class="mb-4" id="current-profile-image">
+      <%= image_tag current_wizard.profile_image, alt: "Current profile image", class: "img-fluid rounded-circle", style: "border-radius: 100%; width: 100px; height: 100px; object-fit: cover;" %>
+    </div>
+  <% end %>
+
+  <!-- File input for selecting a new profile image -->
+  <%= form.file_field :profile_image, class: "form-control", id: "wizard-profile-image-field" %>
+
+  <!-- Preview of the new image when selected -->
+  <script>
+    document.getElementById('wizard-profile-image-field').addEventListener('change', function(e) {
+      var file = e.target.files[0]; // Get the selected file
+      var reader = new FileReader();
+
+      reader.onload = function(event) {
+        var previewContainer = document.getElementById('current-profile-image');
+        previewContainer.innerHTML = ''; // Clear the current profile image
+
+        var imgElement = document.createElement('img');
+        imgElement.src = event.target.result;
+        imgElement.alt = 'Selected profile image';
+        imgElement.classList.add('img-fluid', 'rounded-circle');
+        imgElement.style = 'border-radius: 100%; width: 100px; height: 100px; object-fit: cover;';
+
+        previewContainer.appendChild(imgElement); // Add the new image as the current profile image
+      }
+
+      if (file) {
+        reader.readAsDataURL(file); // Convert the file to a data URL
+      }
+    });
+  </script>
   </div>
+
+
 
   <div class="actions mb-3">
     <%= form.submit "Update Profile", class: "btn btn-primary" %>

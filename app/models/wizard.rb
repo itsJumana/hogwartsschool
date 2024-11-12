@@ -8,6 +8,9 @@ class Wizard < ApplicationRecord
          :recoverable, :rememberable, :validatable
   
 
+  # Attach a profile picture
+  has_one_attached :profile_image
+
   # Roles
   ADMIN_ROLE = "admin"
   WIZARD_ROLE = "wizard"
@@ -32,6 +35,8 @@ class Wizard < ApplicationRecord
   validates :date_of_birth, presence: true
   validates :muggle_relative, inclusion: { in: [true, false] }
   validates :role, inclusion: { in: [ADMIN_ROLE, WIZARD_ROLE] }
+  validates :profile_image, content_type: ['image/png', 'image/jpg', 'image/jpeg'],
+                            size: { less_than: 5.megabytes , message: 'is too large. Maximum size is 5MB.' }
 
   private
 

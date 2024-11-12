@@ -1,24 +1,30 @@
 <h2>Your Profile</h2>
 
+<div class="profile-image mb-3">
+  <% if @wizard.profile_image.attached? %>
+    <%= image_tag current_wizard.profile_image, class: "img-fluid rounded-circle", alt: "Profile Image", style: "border-radius: 100%; width: 100px; height: 100px; object-fit: cover;" %>
+  <% end %>
+  </div>
+
 <div class="profile-info container mb-4">
-  <p><strong>Name:</strong> <%= @wizard.name %></p>
-  <p><strong>Email:</strong> <%= @wizard.email %> </p>
-  <p><strong>House:</strong> <%= @wizard.house %></p>
-  <p><strong>Date of Birth:</strong> <%= @wizard.date_of_birth %></p>
-  <p><strong>Bio:</strong> <%= @wizard.bio %></p>
-  <p><strong>Muggle Relative:</strong> <%= @wizard.muggle_relative ? 'Yes' : 'No' %></p>
+  <p><strong>Name:</strong> <%= current_wizard.name %></p>
+  <p><strong>Email:</strong> <%= current_wizard.email %> </p>
+  <p><strong>House:</strong> <%= current_wizard.house %></p>
+  <p><strong>Date of Birth:</strong> <%= current_wizard.date_of_birth %></p>
+  <p><strong>Bio:</strong> <%= current_wizard.bio %></p>
+  <p><strong>Muggle Relative:</strong> <%= current_wizard.muggle_relative ? 'Yes' : 'No' %></p>
 </div>
 
 <div class="profile-actions mb-4">
-  <%= link_to "Edit Profile", edit_wizard_path(@wizard), class: "btn btn-primary" %>
-  <%= link_to "Change Password", edit_wizard_registration_path(@wizard), class: "btn btn-secondary" %>
+  <%= link_to "Edit Profile", edit_wizard_path(current_wizard), class: "btn btn-primary" %>
+  <%= link_to "Change Password", edit_wizard_registration_path(current_wizard), class: "btn btn-secondary" %>
 </div>
 
 <div class="mb-4">
   <h2>Spells</h2>
-  <% if @wizard.spells.any? %>
+  <% if current_wizard.spells.any? %>
     <ul class="list-unstyled">
-      <% @wizard.spells.each do |spell| %>
+      <% current_wizard.spells.each do |spell| %>
         <li class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <strong><%= spell.name %>:</strong> <%= spell.description %>
