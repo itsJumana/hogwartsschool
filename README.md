@@ -10,10 +10,10 @@ application up and running.
 - **MySQL**: Ensure MySQL server is installed and running.
 
 * Configuration
-* Create a .env file and add your database credentials:
+* Update the database.yml file and add your database credentials:
   ```dotenv
-   DATABASE_USERNAME=your_username
-   DATABASE_PASSWORD=your_password
+   DATABASE_USERNAME
+   DATABASE_PASSWORD
 
 
 * Database creation
