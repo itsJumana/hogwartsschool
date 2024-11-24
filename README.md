@@ -3,10 +3,6 @@
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
-Things you may want to cover:
-
-* Ruby version
-
 * System dependencies
 * Ensure you have the following installed on your system:
 - **Ruby 3.2.1**: Use a version manager like [rbenv](https://github.com/rbenv/rbenv) or [rvm](https://rvm.io) to manage Ruby versions.
