@@ -25,6 +25,7 @@ class WizardsController < ApplicationController
   #GET /profile
   def profile
     @wizard = current_wizard
+    render :show
   end
 
   # POST /wizards or /wizards.json
