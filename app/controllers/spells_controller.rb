@@ -1,5 +1,6 @@
 class SpellsController < ApplicationController
   before_action :set_spell, only: %i[ show edit update destroy ]
+  before_action -> {authorize_wizard_or_admin(current_wizard)}, only: [:create, :edit, :update, :destroy]
 
   # GET /spells or /spells.json
   def index

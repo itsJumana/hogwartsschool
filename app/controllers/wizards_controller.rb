@@ -1,7 +1,8 @@
 class WizardsController < ApplicationController
   before_action :set_wizard, only: %i[ show edit update destroy ]
   before_action :authenticate_wizard!, except: [:index, :show]
-  before_action :authorize_wizard, only: %i[ edit update destroy ]
+  before_action -> { authorize_wizard_or_admin(@wizard) }, only: [:edit, :update, :destroy]
+  after_action :send_welcome_email, only: [:create]
 
   # GET /wizards or /wizards.json
   def index
@@ -34,10 +35,8 @@ class WizardsController < ApplicationController
       if @wizard.save
         # Automatically sign in the wizard after registration
         sign_in(@wizard)
-
-        WizardMailer.welcome(@wizard).deliver_later
         
-        format.html { redirect_to root_path, notice: "Welcome to Hogwarts! Check your email for details." }
+        format.html { redirect_to root_path}
         format.json { render :show, status: :created, location: @wizard }
       else
         format.html { render :new , status: :unprocessable_entity }
@@ -89,10 +88,7 @@ class WizardsController < ApplicationController
       end
     end
 
-    # Allows access if the wizard is either the owner of the profile or the admin.
-    def authorize_wizard
-      unless @wizard == current_wizard || current_wizard.admin?
-        redirect_to root_path, alert: "Not authorized to edit this profile"
-      end
+    def send_welcome_email
+      WizardMailer.welcome_email(self).deliver_later
     end
 end
