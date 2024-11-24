@@ -25,6 +25,11 @@ application up and running.
   ```bash
   rails db:migrate
 
+* Seed the database with initial data (Creating Dumbledore as admin):
+  ```bash
+  bin/rails db:seed
+
+
  * Start the Rails server:
    ```bash
    rails s -p 5000
