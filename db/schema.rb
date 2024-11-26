@@ -40,10 +40,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_12_085156) do
   end
 
   create_table "followers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.integer "follower_id"
-    t.integer "followed_id"
+    t.bigint "follower_id", null: false
+    t.bigint "followed_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["followed_id"], name: "fk_rails_0fb6917357"
+    t.index ["follower_id"], name: "fk_rails_5b83ba9503"
   end
 
   create_table "spells", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -76,5 +78,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_12_085156) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "followers", "wizards", column: "followed_id"
+  add_foreign_key "followers", "wizards", column: "follower_id"
   add_foreign_key "spells", "wizards"
 end
