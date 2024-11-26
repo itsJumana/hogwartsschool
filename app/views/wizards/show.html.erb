@@ -1,10 +1,81 @@
-<p style="color: green"><%= notice %></p>
+<div class="container mt-4">
+  <!-- Profile Header -->
+  <div class="row align-items-center mb-4">
+    <!-- Profile Image -->
+    <div class="col-md-3 text-center">
+      <% if @wizard.profile_image.attached? %>
+        <%= image_tag @wizard.profile_image, alt: "#{@wizard.name}'s profile picture", 
+          class: "img-fluid rounded-circle", 
+          style: "width: 150px; height: 150px; object-fit: cover;" %>
+      <% else %>
+        <%= image_tag "default_profile.png", alt: "Default profile picture", 
+          class: "img-fluid rounded-circle", 
+          style: "width: 150px; height: 150px; object-fit: cover;" %>
+      <% end %>
+    </div>
 
-<%= render @wizard %>
+    <!-- Profile Details -->
+    <div class="col-md-9">
+      <h2><%= @wizard.name %></h2>
+      <p class="text-muted mb-1"><b>House:</b> <%= @wizard.house %></p>
+      <p class="mb-2"><b>Bio:</b> <%= @wizard.bio.presence || "No bio provided." %></p>
+      <p class="mb-2">
+        <span class="badge bg-primary">Followers: <%= @wizard.followers.count %></span>
+        <span class="badge bg-secondary">Following: <%= @wizard.following.count %></span>
+      </p>
 
+      <!-- Follow/Unfollow Button -->
+      <% if current_wizard != @wizard %>
+        <% if current_wizard.following.include?(@wizard) %>
+          <%= button_to 'Unfollow', unfollow_path(followed_id: @wizard.id), method: :delete, class: 'btn btn-danger' %>
+        <% else %>
+          <%= button_to 'Follow', follow_path(followed_id: @wizard.id), method: :post, class: 'btn btn-primary' %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Spells Section -->
+  <div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3>Spells</h3>
+      <% if current_wizard.admin? || current_wizard == @wizard  %>
+        <%= link_to "Create New Spell", new_spell_path, class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  
+    <% if @wizard.spells.any? %>
+      <div class="row mb-4">
+        <% @wizard.spells.each do |spell| %>
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title text-primary"><%= spell.name %></h5>
+                <p class="card-text"><%= spell.description %></p>
+  
+                <% if current_wizard.admin? || current_wizard == @wizard %>
+                  <div class="d-flex justify-content-between">
+                    <%= link_to "Edit", edit_spell_path(spell), class: "btn btn-primary" %>
+                    <%= button_to "Delete", spell_path(spell), method: :delete, class: "btn btn-outline-danger btn-sm" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-muted">This wizard has no spells yet.</p>
+    <% end %>
+  </div>  
+</div>
+
+<!-- Admin Actions (Only for Admin) -->
 <div>
-  <%= link_to "Edit this wizard", edit_wizard_path(@wizard) %> |
-  <%= link_to "Back to wizards", wizards_path %>
-
-  <%= button_to "Destroy this wizard", @wizard, method: :delete %>
+  <% if current_wizard.admin? || current_wizard == @wizard %>
+    <%= link_to "Edit Profile", edit_wizard_path(@wizard), class: "btn btn-primary mb-4" %>
+    <% unless current_wizard == @wizard %>
+      <%= button_to "Destroy this wizard", @wizard, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger mb-4" %>
+    <% end %>
+  <% end %>
 </div>

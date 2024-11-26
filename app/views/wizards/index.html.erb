@@ -1,14 +1,33 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Wizards</h1>
-
-<div id="wizards">
-  <% @wizards.each do |wizard| %>
-    <%= render wizard %>
-    <p>
-      <%= link_to "Show this wizard", wizard %>
-    </p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div class="flex-grow-1 text-center">
+    <h1 class="mb-0">Wizards</h1>
+  </div>
+  
+  <% if current_wizard.admin? %>
+    <div>
+      <%= link_to "Create a New Wizard", new_wizard_path, class: "btn btn-primary" %>
+    </div>
   <% end %>
 </div>
 
-<%= link_to "New wizard", new_wizard_path %>
+
+<div class="container">
+  <div class="row">
+    <% @wizards.each do |wizard| %>
+      <div class="col-md-4 mb-4 text-center">
+        <div class="card">
+          <% if wizard.profile_image.attached? %>
+            <%= image_tag wizard.profile_image, alt: "#{wizard.name}'s profile picture", class: "card-img-top rounded-circle mx-auto d-block mt-3", style: "width: 100px; height: 100px; object-fit: cover;" %>
+          <% else %>
+            <%= image_tag 'default_profile.png', alt: "Default profile picture", class: "card-img-top rounded-circle mx-auto d-block mt-3", style: "width: 100px; height: 100px; object-fit: cover;" %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= wizard.name %></h5>
+            <p class="card-text"><%= truncate(wizard.bio, length: 50) %></p>
+            <%= link_to "View Profile", wizard_path(wizard), class: "btn btn-primary btn-sm" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
