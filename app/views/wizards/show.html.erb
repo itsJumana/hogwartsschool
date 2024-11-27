@@ -27,7 +27,7 @@
       <!-- Follow/Unfollow Button -->
       <% if current_wizard != @wizard %>
         <% if current_wizard.following.include?(@wizard) %>
-          <%= button_to 'Unfollow', unfollow_path(followed_id: @wizard.id), method: :delete, class: 'btn btn-danger' %>
+          <%= button_to 'Unfollow', unfollow_path(followed_id: @wizard.id), method: :delete, class: 'btn btn-secondary' %>
         <% else %>
           <%= button_to 'Follow', follow_path(followed_id: @wizard.id), method: :post, class: 'btn btn-primary' %>
         <% end %>

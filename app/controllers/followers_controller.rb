@@ -1,70 +1,29 @@
 class FollowersController < ApplicationController
-  before_action :set_follower, only: %i[ show edit update destroy ]
+  before_action :authenticate_wizard!
+  before_action :set_wizard
 
-  # GET /followers or /followers.json
-  def index
-    @followers = Follower.all
+  # Follow a wizard
+  def follow
+    if current_wizard != @wizard
+      Follower.create_or_find_by(follower_id: current_wizard.id, followed_id: @wizard.id)
+    end
+    redirect_to wizard_path(@wizard)
   end
 
-  # GET /followers/1 or /followers/1.json
-  def show
-  end
-
-  # GET /followers/new
-  def new
-    @follower = Follower.new
-  end
-
-  # GET /followers/1/edit
-  def edit
-  end
-
-  # POST /followers or /followers.json
-  def create
-    @follower = Follower.new(follower_params)
-
-    respond_to do |format|
-      if @follower.save
-        format.html { redirect_to @follower, notice: "Follower was successfully created." }
-        format.json { render :show, status: :created, location: @follower }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @follower.errors, status: :unprocessable_entity }
+  # Unfollow a wizard
+  def unfollow
+    if current_wizard != @wizard
+      follow_record = Follower.find_by(follower_id: current_wizard.id, followed_id: @wizard.id)
+      if follow_record
+        follow_record.destroy
       end
     end
-  end
-
-  # PATCH/PUT /followers/1 or /followers/1.json
-  def update
-    respond_to do |format|
-      if @follower.update(follower_params)
-        format.html { redirect_to @follower, notice: "Follower was successfully updated." }
-        format.json { render :show, status: :ok, location: @follower }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @follower.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /followers/1 or /followers/1.json
-  def destroy
-    @follower.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to followers_path, status: :see_other, notice: "Follower was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to wizard_path(@wizard)
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_follower
-      @follower = Follower.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def follower_params
-      params.require(:follower).permit(:follower_id, :followed_id)
-    end
+  def set_wizard
+    @wizard = Wizard.find(params[:followed_id])
+  end
 end

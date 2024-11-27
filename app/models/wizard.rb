@@ -21,8 +21,12 @@ class Wizard < ApplicationRecord
 
   # Associations
   has_many :spells
-  has_many :followers, foreign_key: :follower_id, class_name: 'Follower'
-  has_many :followed_wizards, through: :followers, source: :followed
+
+  has_many :follows_as_follower, class_name: 'Follower', foreign_key: :follower_id, dependent: :destroy
+  has_many :following, through: :follows_as_follower, source: :followed, dependent: :destroy
+
+  has_many :follows_as_followed, class_name: 'Follower', foreign_key: :followed_id, dependent: :destroy
+  has_many :followers, through: :follows_as_followed, source: :follower, dependent: :destroy
 
 
   # Validations
